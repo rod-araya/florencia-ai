@@ -1,0 +1,258 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║           🚀 NUEVO MOTOR DE EJECUCIÓN - execution.py                      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📦 COMPONENTES CREADOS
+─────────────────────────────────────────────────────────────────────────────
+
+✅ ARCHIVO: /opt/projects/florencia-ai/app/execution.py
+   └─ 250+ líneas de código producción-ready
+   
+✅ CLASE: Position
+   └─ Representa una posición abierta o cerrada
+   └─ Campos: side, entry, stop, tp, size, status, pnl, etc
+   └─ Estados: PENDING_ENTRY → OPEN → CLOSED_TP|CLOSED_SL
+   
+✅ CLASE: ExchangeEngine  
+   └─ Motor principal de ejecución
+   └─ Métodos: can_open(), open(), poll(), get_stats()
+   └─ Soporta: LONG/SHORT, spot/derivados, TP/SL automático
+
+─────────────────────────────────────────────────────────────────────────────
+
+⚡ CARACTERÍSTICAS PRINCIPALES
+─────────────────────────────────────────────────────────────────────────────
+
+ENTRADA
+  ✓ Órdenes LIMIT en precio especificado
+  ✓ Validación de confianza (mínimo 60%)
+  ✓ Control de máximo de posiciones abiertas
+  ✓ Gestión automática de precisión (CCXT)
+
+GESTIÓN
+  ✓ Seguimiento automático de estado
+  ✓ Sincronización con exchange cada vela
+  ✓ Manejo de fill/cancel automático
+  ✓ Control de TP/SL por precio de vela
+
+CIERRE
+  ✓ Cierre MARKET automático
+  ✓ Prioridad: SL > TP (si ambos en misma vela)
+  ✓ Cálculo de PnL real
+  ✓ Logging detallado
+
+SEGURIDAD
+  ✓ Paper trading con testnet
+  ✓ Sin hardcodeo de credenciales
+  ✓ Validación de parámetros
+  ✓ Manejo robusto de excepciones
+
+─────────────────────────────────────────────────────────────────────────────
+
+🔄 FLUJO DE UNA OPERACIÓN TÍPICA
+─────────────────────────────────────────────────────────────────────────────
+
+1. DETECCIÓN (LLM)
+   ├─ Detecta ChoCH válido
+   ├─ Valida post-swing
+   └─ Confianza >= 60%
+
+2. APERTURA (engine.open)
+   ├─ Crear orden LIMIT en entry
+   ├─ Status: PENDING_ENTRY
+   └─ ID de orden asignado
+
+3. SIGUIENTE VELA (engine.poll)
+   ├─ Sincronizar estado con exchange
+   ├─ ¿Orden llenada?
+   │  └─ Status: OPEN
+   ├─ ¿TP/SL tocado?
+   │  └─ Crear orden MARKET de cierre
+   └─ Status: CLOSED_TP | CLOSED_SL
+
+4. CIERRE (PnL calculado)
+   ├─ PnL = (close - entry) × size × sign
+   ├─ LONG: sign = +1
+   ├─ SHORT: sign = -1
+   └─ Total realizado sumado
+
+5. LOG (Estadísticas)
+   ├─ pending_entry: órdenes esperando llenarse
+   ├─ open: posiciones activas
+   ├─ closed_tp: cerradas en TP
+   ├─ closed_sl: cerradas en SL
+   └─ total_realized_pnl: PnL acumulado
+
+─────────────────────────────────────────────────────────────────────────────
+
+💰 CÁLCULO DE PnL
+─────────────────────────────────────────────────────────────────────────────
+
+LONG:
+  Entry: 100 USDT
+  Close: 110 USDT (TP)
+  Size: 0.001 BTC
+  PnL = (110 - 100) × 0.001 = 0.01 BTC ≈ $0.10 en fees
+
+SHORT:
+  Entry: 110 USDT
+  Close: 100 USDT (TP)
+  Size: 0.001 BTC
+  PnL = (100 - 110) × -1 × 0.001 = 0.01 BTC (ganancia)
+
+─────────────────────────────────────────────────────────────────────────────
+
+🎯 INTEGRACIÓN EN LÍNEAS
+─────────────────────────────────────────────────────────────────────────────
+
+PASO 1: Importar
+  from execution import ExchangeEngine
+
+PASO 2: Inicializar (en main())
+  engine = ExchangeEngine(
+      exchange=ccxt_client,
+      symbol="BTC/USDT",
+      is_derivatives=False,  # o True para binanceusdm
+      max_open_positions=1,
+      min_confidence=0.60
+  )
+
+PASO 3: Abrir trade (cuando detectes señal)
+  position = engine.open(
+      side="LONG",
+      entry=100.00,
+      stop=95.00,
+      tp=110.00,
+      size=0.001,
+      ts="2025-10-24T03:30:00",
+      confidence=0.75
+  )
+
+PASO 4: Sincronizar (cada vela)
+  candle = {
+      "ts": "2025-10-24T03:35:00",
+      "open": 100.50,
+      "high": 101.00,
+      "low": 99.50,
+      "close": 100.75
+  }
+  engine.poll(candle)
+
+PASO 5: Leer estadísticas
+  stats = engine.get_stats()
+  print(stats["total_realized_pnl"])
+
+─────────────────────────────────────────────────────────────────────────────
+
+📊 SOPORTE DE EXCHANGES
+─────────────────────────────────────────────────────────────────────────────
+
+BINANCE SPOT (binance)
+  ├─ LONG:  ✅ Soportado
+  ├─ SHORT: ❌ No soportado (requiere margin)
+  └─ Uso:   EXCHANGE=binance
+
+BINANCE USDT-M FUTURES (binanceusdm)
+  ├─ LONG:  ✅ Soportado
+  ├─ SHORT: ✅ Soportado
+  └─ Uso:   EXCHANGE=binanceusdm
+
+PAPER TRADING (Testnet)
+  ├─ Setup:  client.set_sandbox_mode(True)
+  ├─ PAPER:  true (en .env)
+  └─ Seguro: Sin riesgo real
+
+LIVE TRADING
+  ├─ Setup:  client.set_sandbox_mode(False)
+  ├─ PAPER:  false (en .env)
+  └─ ⚠️ CUIDADO: Usa capital real
+
+─────────────────────────────────────────────────────────────────────────────
+
+📋 VALIDACIONES AUTOMÁTICAS
+─────────────────────────────────────────────────────────────────────────────
+
+CONFIANZA MÍNIMA
+  ✓ engine.min_confidence = 0.60 (por defecto)
+  ✓ Si confidence < 0.60 → Rechaza apertura
+  ✓ Log: "EX REJECTED | confidence=0.45 < min=0.60"
+
+POSICIONES MÁXIMAS
+  ✓ engine.max_open_positions = 1 (por defecto)
+  ✓ Si 1 abierta → Rechaza nueva
+  ✓ Log: "EX REJECTED | max 1 posiciones abiertas"
+
+PRECISIÓN DE EXCHANGE
+  ✓ Redondea precio a decimales del exchange
+  ✓ Redondea cantidad a unidades mínimas
+  ✓ Previene errores de formato
+
+ESTADO DE LADO
+  ✓ LONG: buy + sell (cierre)
+  ✓ SHORT: sell + buy (cierre)
+  ✓ En derivados: reduce_only=True
+
+─────────────────────────────────────────────────────────────────────────────
+
+📈 MONITOREO Y LOGS
+─────────────────────────────────────────────────────────────────────────────
+
+ORDEN ABIERTA:
+  EX OPEN LONG | entry=100.00 sl=95.00 tp=110.00 size=0.001 conf=0.75
+  EX ORDER PLACED | id=abc123 side=LONG entry=100.00 sl=95.00 tp=110.00
+
+ORDEN LLENADA:
+  EX ENTRY FILLED | LONG id=abc123 price=100.02
+
+POSICIÓN CERRADA (TP):
+  EX LONG CLOSED TP | close=110.05 pnl=0.01
+
+POSICIÓN CERRADA (SL):
+  EX SHORT CLOSED SL | close=94.95 pnl=-0.01
+
+ESTADÍSTICAS:
+  EX STATS | pending=0 open=0 closed_tp=1 closed_sl=0 pnl=0.01
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📖 DOCUMENTACIÓN INCLUIDA
+─────────────────────────────────────────────────────────────────────────────
+
+✅ GUIA_INTEGRACION_EXECUTION.md
+   └─ 300+ líneas
+   └─ Paso a paso de integración
+   └─ Ejemplos completos
+   └─ Checklist de validación
+   └─ Casos de uso
+   └─ FAQ
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔗 PRÓXIMOS PASOS
+─────────────────────────────────────────────────────────────────────────────
+
+FASE 1: Testing
+  1. Generar API keys en Binance Testnet
+  2. Configura variables de entorno
+  3. Integra execution.py en main.py
+  4. Ejecuta con PAPER=true (testnet)
+  5. Monitorea logs durante 1-2 horas
+
+FASE 2: Validación
+  1. Verifica estado de órdenes en exchange
+  2. Compara PnL en logs vs Binance
+  3. Prueba diferentes timeframes
+  4. Prueba LONG y SHORT (si derivados)
+
+FASE 3: Producción
+  1. Cuando validado: PAPER=false
+  2. Comienza con posición pequeña
+  3. Monitorea 24/7
+  4. Escalona gradualmente
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Fecha: 24 de octubre, 2025
+Estado: ✅ COMPLETADO
+
+═══════════════════════════════════════════════════════════════════════════════

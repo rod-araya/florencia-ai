@@ -1,0 +1,1371 @@
+2025-10-24 10:04:45.369 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:05:32.988 | ERROR    | __main__:main:161 - Loop error: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x76e04bd313a0>
+               └ <urllib3.connection.HTTPConnection object at 0x76e048fb06d0>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x76e04c1a34c0>
+    └ <http.client.HTTPResponse object at 0x76e04887c100>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x76e04c1a3420>
+                              └ <http.client.HTTPResponse object at 0x76e04887c100>
+  File "/usr/local/lib/python3.11/http/client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               │    │           └ 65536
+               │    └ None
+               └ <http.client.HTTPResponse object at 0x76e04887c100>
+  File "/usr/local/lib/python3.11/socket.py", line 718, in readinto
+    return self._sock.recv_into(b)
+           │    │               └ <memory at 0x76e049e81600>
+           │    └ None
+           └ <socket.SocketIO object at 0x76e04887c040>
+
+TimeoutError: timed out
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x76e04bd5d620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e0405392d0>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x76e04c002b60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          │            │       │      └ <traceback object at 0x76e040539700>
+          │            │       └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)")
+          │            └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)")
+          └ <function reraise at 0x76e04c001300>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+          └ None
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x76e04bd5d440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e0405392d0>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    │    │                         │                  └ 45
+    │    │                         └ '/api/generate'
+    │    └ <function HTTPConnectionPool._raise_timeout at 0x76e04bd5d3a0>
+    └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e0405392d0>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+          └ <class 'urllib3.exceptions.ReadTimeoutError'>
+
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x76e049ed3560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T06:30', 'price': 111232.0}, {'type': 'L', 'ts': '2025-10-24T07:20', 'price': 111069.46}, {'t...
+             │                         └ [['2025-10-24T05:50-03:00', 111148.95, 111206.63, 111097.11, 111132.07], ['2025-10-24T05:55-03:00', 111132.06, 111133.31, 111...
+             └ <function detect_structure_with_llm at 0x76e04a50fa60>
+
+  File "/app/structure_oracle.py", line 146, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously identify: (1) H/L pivots (fractal K)...
+           └ <function detect_structure_with_llm.<locals>._call at 0x76e049e93d80>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=45)  # era 180
+        │        │                                    └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is t...
+        │        └ <function post at 0x76e04bbe77e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 45}
+           │               │         │          └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is t...
+           │               │         └ None
+           │               └ 'http://florencia-ai-ollama:11434/api/generate'
+           └ <function request at 0x76e04bc9d080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute ...
+           │       │              │           └ 'http://florencia-ai-ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x76e04bbe6ca0>
+           └ <requests.sessions.Session object at 0x76e04990b8d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 45, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x76e04bbe71a0>
+           └ <requests.sessions.Session object at 0x76e04990b8d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 45, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x76e04bbe6520>
+        └ <requests.adapters.HTTPAdapter object at 0x76e040539f10>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 713, in send
+    raise ReadTimeout(e, request=request)
+          │                      └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ReadTimeout'>
+
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+2025-10-24 10:07:21.131 | ERROR    | __main__:main:161 - Loop error: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x76e04bd313a0>
+               └ <urllib3.connection.HTTPConnection object at 0x76e047267c90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x76e04c1a34c0>
+    └ <http.client.HTTPResponse object at 0x76e049f0ad70>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x76e04c1a3420>
+                              └ <http.client.HTTPResponse object at 0x76e049f0ad70>
+  File "/usr/local/lib/python3.11/http/client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               │    │           └ 65536
+               │    └ None
+               └ <http.client.HTTPResponse object at 0x76e049f0ad70>
+  File "/usr/local/lib/python3.11/socket.py", line 718, in readinto
+    return self._sock.recv_into(b)
+           │    │               └ <memory at 0x76e049e81e40>
+           │    └ None
+           └ <socket.SocketIO object at 0x76e049f0ac80>
+
+TimeoutError: timed out
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x76e04bd5d620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e047267e90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x76e04c002b60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          │            │       │      └ <traceback object at 0x76e047267c40>
+          │            │       └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)")
+          │            └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)")
+          └ <function reraise at 0x76e04c001300>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+          └ None
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x76e04bd5d440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e047267e90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    │    │                         │                  └ 45
+    │    │                         └ '/api/generate'
+    │    └ <function HTTPConnectionPool._raise_timeout at 0x76e04bd5d3a0>
+    └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e047267e90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+          └ <class 'urllib3.exceptions.ReadTimeoutError'>
+
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x76e049ed3560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T06:30', 'price': 111232.0}, {'type': 'L', 'ts': '2025-10-24T07:20', 'price': 111069.46}, {'t...
+             │                         └ [['2025-10-24T05:55-03:00', 111132.06, 111133.31, 111059.37, 111097.8], ['2025-10-24T06:00-03:00', 111097.79, 111097.8, 11100...
+             └ <function detect_structure_with_llm at 0x76e04a50fa60>
+
+  File "/app/structure_oracle.py", line 146, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously identify: (1) H/L pivots (fractal K)...
+           └ <function detect_structure_with_llm.<locals>._call at 0x76e04fad96c0>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=45)  # era 180
+        │        │                                    └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is t...
+        │        └ <function post at 0x76e04bbe77e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 45}
+           │               │         │          └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is t...
+           │               │         └ None
+           │               └ 'http://florencia-ai-ollama:11434/api/generate'
+           └ <function request at 0x76e04bc9d080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute ...
+           │       │              │           └ 'http://florencia-ai-ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x76e04bbe6ca0>
+           └ <requests.sessions.Session object at 0x76e04373cd10>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 45, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x76e04bbe71a0>
+           └ <requests.sessions.Session object at 0x76e04373cd10>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 45, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x76e04bbe6520>
+        └ <requests.adapters.HTTPAdapter object at 0x76e04373d250>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 713, in send
+    raise ReadTimeout(e, request=request)
+          │                      └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ReadTimeout'>
+
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+2025-10-24 10:11:13.937 | ERROR    | __main__:main:161 - Loop error: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x76e04bd313a0>
+               └ <urllib3.connection.HTTPConnection object at 0x76e0467ba010>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x76e04c1a34c0>
+    └ <http.client.HTTPResponse object at 0x76e04887d840>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x76e04c1a3420>
+                              └ <http.client.HTTPResponse object at 0x76e04887d840>
+  File "/usr/local/lib/python3.11/http/client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               │    │           └ 65536
+               │    └ None
+               └ <http.client.HTTPResponse object at 0x76e04887d840>
+  File "/usr/local/lib/python3.11/socket.py", line 718, in readinto
+    return self._sock.recv_into(b)
+           │    │               └ <memory at 0x76e049e81600>
+           │    └ None
+           └ <socket.SocketIO object at 0x76e04887da20>
+
+TimeoutError: timed out
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x76e04bd5d620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e044c25f90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x76e04c002b60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          │            │       │      └ <traceback object at 0x76e044c26240>
+          │            │       └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)")
+          │            └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)")
+          └ <function reraise at 0x76e04c001300>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+          └ None
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x76e04bd5d440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e044c25f90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    │    │                         │                  └ 45
+    │    │                         └ '/api/generate'
+    │    └ <function HTTPConnectionPool._raise_timeout at 0x76e04bd5d3a0>
+    └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76e044c25f90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+          └ <class 'urllib3.exceptions.ReadTimeoutError'>
+
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x76e049ed3560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T06:30', 'price': 111232.0}, {'type': 'L', 'ts': '2025-10-24T07:20', 'price': 111069.46}, {'t...
+             │                         └ [['2025-10-24T06:00-03:00', 111097.79, 111097.8, 111000.0, 111000.0], ['2025-10-24T06:05-03:00', 111000.0, 111349.08, 111000....
+             └ <function detect_structure_with_llm at 0x76e04a50fa60>
+
+  File "/app/structure_oracle.py", line 146, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously identify: (1) H/L pivots (fractal K)...
+           └ <function detect_structure_with_llm.<locals>._call at 0x76e04fad93a0>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=45)  # era 180
+        │        │                                    └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is t...
+        │        └ <function post at 0x76e04bbe77e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 45}
+           │               │         │          └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is t...
+           │               │         └ None
+           │               └ 'http://florencia-ai-ollama:11434/api/generate'
+           └ <function request at 0x76e04bc9d080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute ...
+           │       │              │           └ 'http://florencia-ai-ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x76e04bbe6ca0>
+           └ <requests.sessions.Session object at 0x76e044c24b10>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 45, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x76e04bbe71a0>
+           └ <requests.sessions.Session object at 0x76e044c24b10>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 45, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x76e04bbe6520>
+        └ <requests.adapters.HTTPAdapter object at 0x76e0467bb910>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 713, in send
+    raise ReadTimeout(e, request=request)
+          │                      └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ReadTimeout'>
+
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=45)
+2025-10-24 10:12:55.955 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:13:49.994 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:15:32.770 | ERROR    | __main__:main:161 - Loop error: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=60)
+Traceback (most recent call last):
+
+  File "/app/structure_oracle.py", line 149, in detect_structure_with_llm
+    data = json.loads(txt1)
+           │    │     └ '{"data": {"pivot_candidates": [{"type": "L", "ts": "2025-10-24T06:30", "price": 111232.0}, {"type": "L", "ts": "2025-10-24T0...
+           │    └ <function loads at 0x7ec40ab3ac00>
+           └ <module 'json' from '/usr/local/lib/python3.11/json/__init__.py'>
+
+  File "/usr/local/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           │                │      └ '{"data": {"pivot_candidates": [{"type": "L", "ts": "2025-10-24T06:30", "price": 111232.0}, {"type": "L", "ts": "2025-10-24T0...
+           │                └ <function JSONDecoder.decode at 0x7ec40ab3a520>
+           └ <json.decoder.JSONDecoder object at 0x7ec414dbe350>
+  File "/usr/local/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               │    │          │      │  └ '{"data": {"pivot_candidates": [{"type": "L", "ts": "2025-10-24T06:30", "price": 111232.0}, {"type": "L", "ts": "2025-10-24T0...
+               │    │          │      └ <built-in method match of re.Pattern object at 0x7ec40afe5d80>
+               │    │          └ '{"data": {"pivot_candidates": [{"type": "L", "ts": "2025-10-24T06:30", "price": 111232.0}, {"type": "L", "ts": "2025-10-24T0...
+               │    └ <function JSONDecoder.raw_decode at 0x7ec40ab3a5c0>
+               └ <json.decoder.JSONDecoder object at 0x7ec414dbe350>
+  File "/usr/local/lib/python3.11/json/decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               │    │         │  └ 0
+               │    │         └ '{"data": {"pivot_candidates": [{"type": "L", "ts": "2025-10-24T06:30", "price": 111232.0}, {"type": "L", "ts": "2025-10-24T0...
+               │    └ <_json.Scanner object at 0x7ec40ab56a40>
+               └ <json.decoder.JSONDecoder object at 0x7ec414dbe350>
+
+json.decoder.JSONDecodeError: Expecting ',' delimiter: line 1 column 271 (char 270)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x7ec4087f93a0>
+               └ <urllib3.connection.HTTPConnection object at 0x7ec405a50a90>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x7ec408a4b4c0>
+    └ <http.client.HTTPResponse object at 0x7ec406734190>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x7ec408a4b420>
+                              └ <http.client.HTTPResponse object at 0x7ec406734190>
+  File "/usr/local/lib/python3.11/http/client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               │    │           └ 65536
+               │    └ None
+               └ <http.client.HTTPResponse object at 0x7ec406734190>
+  File "/usr/local/lib/python3.11/socket.py", line 718, in readinto
+    return self._sock.recv_into(b)
+           │    │               └ <memory at 0x7ec4069556c0>
+           │    └ None
+           └ <socket.SocketIO object at 0x7ec4067340a0>
+
+TimeoutError: timed out
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x7ec408809620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x7ec405a52f10>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x7ec408a7eb60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          │            │       │      └ <traceback object at 0x7ec405a504c0>
+          │            │       └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=60)")
+          │            └ ReadTimeoutError("HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=60)")
+          └ <function reraise at 0x7ec408a7d300>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+          └ None
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x7ec408809440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x7ec405a52f10>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    │    │                         │                  └ 60
+    │    │                         └ '/api/generate'
+    │    └ <function HTTPConnectionPool._raise_timeout at 0x7ec4088093a0>
+    └ <urllib3.connectionpool.HTTPConnectionPool object at 0x7ec405a52f10>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+          └ <class 'urllib3.exceptions.ReadTimeoutError'>
+
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=60)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x7ec40699f560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T06:30', 'price': 111232.0}, {'type': 'L', 'ts': '2025-10-24T07:20', 'price': 111069.46}, {'t...
+             │                         └ [['2025-10-24T06:00-03:00', 111097.79, 111097.8, 111000.0, 111000.0], ['2025-10-24T06:05-03:00', 111000.0, 111349.08, 111000....
+             └ <function detect_structure_with_llm at 0x7ec406fc7a60>
+
+  File "/app/structure_oracle.py", line 161, in detect_structure_with_llm
+    raw2 = _call(prompt2)
+           │     └ 'Return ONLY a JSON object that matches EXACTLY this template (same keys, same structure). Fill values based on the data. If ...
+           └ <function detect_structure_with_llm.<locals>._call at 0x7ec40695fd80>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=60)  # era 45
+        │        │                                    └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': 'Return ONLY a JSON object that matches EXACTLY this template (same keys, sa...
+        │        └ <function post at 0x7ec4086e37e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 60}
+           │               │         │          └ {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': 'Return ONLY a JSON object that matches EXACTLY this template (same keys, sa...
+           │               │         └ None
+           │               └ 'http://florencia-ai-ollama:11434/api/generate'
+           └ <function request at 0x7ec408741080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'llama3.2:3b-instruct-q4_0', 'prompt': 'Return ONLY a JSON object that matches EXACTLY this ...
+           │       │              │           └ 'http://florencia-ai-ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x7ec4086e2ca0>
+           └ <requests.sessions.Session object at 0x7ec3fd0070d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 60, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x7ec4086e31a0>
+           └ <requests.sessions.Session object at 0x7ec3fd0070d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 60, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x7ec4086e2520>
+        └ <requests.adapters.HTTPAdapter object at 0x7ec405a78bd0>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 713, in send
+    raise ReadTimeout(e, request=request)
+          │                      └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ReadTimeout'>
+
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='florencia-ai-ollama', port=11434): Read timed out. (read timeout=60)
+2025-10-24 10:16:11.942 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:16:59.343 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:18:40.644 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:18:40.645 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:23:26.556 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:23:26.557 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:23:52.225 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:24:34.060 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:24:36.081 | ERROR    | __main__:main:161 - Loop error: HTTPConnectionPool(host='ollama', port=11434): Max retries exceeded with url: /api/generate (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)"))
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           │          └ <function create_connection at 0x76a741d24680>
+           └ <module 'urllib3.util.connection' from '/usr/local/lib/python3.11/site-packages/urllib3/util/connection.py'>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               │      │           │     │     │       │      └ <SocketKind.SOCK_STREAM: 1>
+               │      │           │     │     │       └ <module 'socket' from '/usr/local/lib/python3.11/socket.py'>
+               │      │           │     │     └ <AddressFamily.AF_UNSPEC: 0>
+               │      │           │     └ 11434
+               │      │           └ 'ollama'
+               │      └ <function getaddrinfo at 0x76a742172c00>
+               └ <module 'socket' from '/usr/local/lib/python3.11/socket.py'>
+  File "/usr/local/lib/python3.11/socket.py", line 974, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               │       │           │     │     │       │     │      └ 0
+               │       │           │     │     │       │     └ 0
+               │       │           │     │     │       └ <SocketKind.SOCK_STREAM: 1>
+               │       │           │     │     └ <AddressFamily.AF_UNSPEC: 0>
+               │       │           │     └ 11434
+               │       │           └ 'ollama'
+               │       └ <built-in function getaddrinfo>
+               └ <module '_socket' from '/usr/local/lib/python3.11/lib-dynload/_socket.cpython-311-x86_64-linux-gnu.so'>
+
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x76a741ae5440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76a73e1cfb50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 493, in _make_request
+    conn.request(
+    │    └ <function HTTPConnection.request at 0x76a741ab9260>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 494, in request
+    self.endheaders()
+    │    └ <function HTTPConnection.endheaders at 0x76a741d19300>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+  File "/usr/local/lib/python3.11/http/client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    │    │            │                            └ False
+    │    │            └ None
+    │    └ <function HTTPConnection._send_output at 0x76a741d18ea0>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+  File "/usr/local/lib/python3.11/http/client.py", line 1058, in _send_output
+    self.send(msg)
+    │    │    └ b'POST /api/generate HTTP/1.1\r\nHost: ollama:11434\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r...
+    │    └ <function HTTPConnection.send at 0x76a741d18cc0>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+  File "/usr/local/lib/python3.11/http/client.py", line 996, in send
+    self.connect()
+    │    └ <function HTTPConnection.connect at 0x76a741ab8cc0>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 325, in connect
+    self.sock = self._new_conn()
+    │    │      │    └ <function HTTPConnection._new_conn at 0x76a741ab8b80>
+    │    │      └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+    │    └ None
+    └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 205, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+          │                   │    │     └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+          │                   │    └ <property object at 0x76a741ad7ec0>
+          │                   └ <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>
+          └ <class 'urllib3.exceptions.NameResolutionError'>
+
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x76a741ae5620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76a73e1cfb50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x76a741d26b60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+          │             │      │    │            └ NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>: Failed to resolve 'ollama' ([Errno -3] Tem...
+          │             │      │    └ NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>: Failed to resolve 'ollama' ([Errno -3] Tem...
+          │             │      └ '/api/generate'
+          │             └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76a73e1cfb50>
+          └ <class 'urllib3.exceptions.MaxRetryError'>
+
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='ollama', port=11434): Max retries exceeded with url: /api/generate (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)"))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x76a73fc9b560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T07:00', 'price': 111186.48}, {'type': 'L', 'ts': '2025-10-24T07:15', 'price': 111062.98}, {'...
+             │                         └ [['2025-10-24T07:00-03:00', 111324.51, 111325.42, 111186.48, 111221.82], ['2025-10-24T07:05-03:00', 111221.81, 111311.7, 1111...
+             └ <function detect_structure_with_llm at 0x76a7402bfa60>
+
+  File "/app/structure_oracle.py", line 146, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously identify: (1) H/L pivots (fractal K)...
+           └ <function detect_structure_with_llm.<locals>._call at 0x76a741dd5e40>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=60)  # era 45
+        │        │                                    └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously iden...
+        │        └ <function post at 0x76a74196f7e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 60}
+           │               │         │          └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously iden...
+           │               │         └ None
+           │               └ 'http://ollama:11434/api/generate'
+           └ <function request at 0x76a741a25080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour jo...
+           │       │              │           └ 'http://ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x76a74196eca0>
+           └ <requests.sessions.Session object at 0x76a73e1cecd0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 60, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x76a74196f1a0>
+           └ <requests.sessions.Session object at 0x76a73e1cecd0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 60, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x76a74196e520>
+        └ <requests.adapters.HTTPAdapter object at 0x76a73e1cd790>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+          │                          └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ConnectionError'>
+
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='ollama', port=11434): Max retries exceeded with url: /api/generate (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73e1a2f50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)"))
+2025-10-24 10:25:38.416 | ERROR    | __main__:main:161 - Loop error: HTTPConnectionPool(host='ollama', port=11434): Max retries exceeded with url: /api/generate (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73daecf50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)"))
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           │          └ <function create_connection at 0x76a741d24680>
+           └ <module 'urllib3.util.connection' from '/usr/local/lib/python3.11/site-packages/urllib3/util/connection.py'>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               │      │           │     │     │       │      └ <SocketKind.SOCK_STREAM: 1>
+               │      │           │     │     │       └ <module 'socket' from '/usr/local/lib/python3.11/socket.py'>
+               │      │           │     │     └ <AddressFamily.AF_UNSPEC: 0>
+               │      │           │     └ 11434
+               │      │           └ 'ollama'
+               │      └ <function getaddrinfo at 0x76a742172c00>
+               └ <module 'socket' from '/usr/local/lib/python3.11/socket.py'>
+  File "/usr/local/lib/python3.11/socket.py", line 974, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               │       │           │     │     │       │     │      └ 0
+               │       │           │     │     │       │     └ 0
+               │       │           │     │     │       └ <SocketKind.SOCK_STREAM: 1>
+               │       │           │     │     └ <AddressFamily.AF_UNSPEC: 0>
+               │       │           │     └ 11434
+               │       │           └ 'ollama'
+               │       └ <built-in function getaddrinfo>
+               └ <module '_socket' from '/usr/local/lib/python3.11/lib-dynload/_socket.cpython-311-x86_64-linux-gnu.so'>
+
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x76a741ae5440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76a73daee990>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 493, in _make_request
+    conn.request(
+    │    └ <function HTTPConnection.request at 0x76a741ab9260>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 494, in request
+    self.endheaders()
+    │    └ <function HTTPConnection.endheaders at 0x76a741d19300>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+  File "/usr/local/lib/python3.11/http/client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    │    │            │                            └ False
+    │    │            └ None
+    │    └ <function HTTPConnection._send_output at 0x76a741d18ea0>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+  File "/usr/local/lib/python3.11/http/client.py", line 1058, in _send_output
+    self.send(msg)
+    │    │    └ b'POST /api/generate HTTP/1.1\r\nHost: ollama:11434\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r...
+    │    └ <function HTTPConnection.send at 0x76a741d18cc0>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+  File "/usr/local/lib/python3.11/http/client.py", line 996, in send
+    self.connect()
+    │    └ <function HTTPConnection.connect at 0x76a741ab8cc0>
+    └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 325, in connect
+    self.sock = self._new_conn()
+    │    │      │    └ <function HTTPConnection._new_conn at 0x76a741ab8b80>
+    │    │      └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+    │    └ None
+    └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 205, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+          │                   │    │     └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+          │                   │    └ <property object at 0x76a741ad7ec0>
+          │                   └ <urllib3.connection.HTTPConnection object at 0x76a73daecf50>
+          └ <class 'urllib3.exceptions.NameResolutionError'>
+
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPConnection object at 0x76a73daecf50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x76a741ae5620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76a73daee990>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x76a741d26b60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+          │             │      │    │            └ NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73daecf50>: Failed to resolve 'ollama' ([Errno -3] Tem...
+          │             │      │    └ NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73daecf50>: Failed to resolve 'ollama' ([Errno -3] Tem...
+          │             │      └ '/api/generate'
+          │             └ <urllib3.connectionpool.HTTPConnectionPool object at 0x76a73daee990>
+          └ <class 'urllib3.exceptions.MaxRetryError'>
+
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='ollama', port=11434): Max retries exceeded with url: /api/generate (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73daecf50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)"))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x76a73fc9b560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T07:15', 'price': 111062.98}, {'type': 'L', 'ts': '2025-10-24T08:00', 'price': 111073.04}, {'...
+             │                         └ [['2025-10-24T07:05-03:00', 111221.81, 111311.7, 111186.5, 111300.79], ['2025-10-24T07:10-03:00', 111300.78, 111822.46, 11126...
+             └ <function detect_structure_with_llm at 0x76a7402bfa60>
+
+  File "/app/structure_oracle.py", line 146, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously identify: (1) H/L pivots (fractal K)...
+           └ <function detect_structure_with_llm.<locals>._call at 0x76a74586d6c0>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=60)  # era 45
+        │        │                                    └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously iden...
+        │        └ <function post at 0x76a74196f7e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 60}
+           │               │         │          └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously iden...
+           │               │         └ None
+           │               └ 'http://ollama:11434/api/generate'
+           └ <function request at 0x76a741a25080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour jo...
+           │       │              │           └ 'http://ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x76a74196eca0>
+           └ <requests.sessions.Session object at 0x76a73e925550>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 60, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x76a74196f1a0>
+           └ <requests.sessions.Session object at 0x76a73e925550>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 60, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x76a74196e520>
+        └ <requests.adapters.HTTPAdapter object at 0x76a73daee9d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+          │                          └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ConnectionError'>
+
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='ollama', port=11434): Max retries exceeded with url: /api/generate (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x76a73daecf50>: Failed to resolve 'ollama' ([Errno -3] Temporary failure in name resolution)"))
+2025-10-24 10:29:20.555 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:29:30.107 | ERROR    | __main__:main:161 - Loop error: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x708a7c4ad440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x708a78bdb490>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x708a7c49d3a0>
+               └ <urllib3.connection.HTTPConnection object at 0x708a78b86d10>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x708a7c8f74c0>
+    └ <http.client.HTTPResponse object at 0x708a7a540100>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x708a7c8f7420>
+                              └ <http.client.HTTPResponse object at 0x708a7a540100>
+  File "/usr/local/lib/python3.11/http/client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+          └ <class 'http.client.RemoteDisconnected'>
+
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x708a7c4ad620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x708a78bdb490>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x708a7c72eb60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          │            │       │      └ <traceback object at 0x708a78bdbbc0>
+          │            │       └ ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+          │            └ ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+          └ <function reraise at 0x708a7c72d300>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+          │                    └ None
+          └ None
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x708a7c4ad440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x708a78bdb490>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x708a7c49d3a0>
+               └ <urllib3.connection.HTTPConnection object at 0x708a78b86d10>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x708a7c8f74c0>
+    └ <http.client.HTTPResponse object at 0x708a7a540100>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x708a7c8f7420>
+                              └ <http.client.HTTPResponse object at 0x708a7a540100>
+  File "/usr/local/lib/python3.11/http/client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+          └ <class 'http.client.RemoteDisconnected'>
+
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x708a7a663560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T07:15', 'price': 111062.98}, {'type': 'L', 'ts': '2025-10-24T08:00', 'price': 111073.04}, {'...
+             │                         └ [['2025-10-24T07:05-03:00', 111221.81, 111311.7, 111186.5, 111300.79], ['2025-10-24T07:10-03:00', 111300.78, 111822.46, 11126...
+             └ <function detect_structure_with_llm at 0x708a7ac5fa60>
+
+  File "/app/structure_oracle.py", line 146, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously identify: (1) H/L pivots (fractal K)...
+           └ <function detect_structure_with_llm.<locals>._call at 0x708a7c7d5e40>
+
+  File "/app/structure_oracle.py", line 132, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=60)  # era 45
+        │        │                                    └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously iden...
+        │        └ <function post at 0x708a7c3377e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 60}
+           │               │         │          └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour job is to rigorously iden...
+           │               │         └ None
+           │               └ 'http://florencia-ai-ollama:11434/api/generate'
+           └ <function request at 0x708a7c3f1080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nYour jo...
+           │       │              │           └ 'http://florencia-ai-ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x708a7c336ca0>
+           └ <requests.sessions.Session object at 0x708a78bdb9d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 60, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x708a7c3371a0>
+           └ <requests.sessions.Session object at 0x708a78bdb9d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 60, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x708a7c336520>
+        └ <requests.adapters.HTTPAdapter object at 0x708a78bb50d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 682, in send
+    raise ConnectionError(err, request=request)
+          │                            └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ConnectionError'>
+
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-10-24 10:29:42.980 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:31:21.710 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:31:21.710 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:31:58.241 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:32:17.032 | ERROR    | __main__:main:161 - Loop error: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x7eae26b29440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x7eae2403ee50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x7eae26b193a0>
+               └ <urllib3.connection.HTTPConnection object at 0x7eae241c6390>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x7eae26d674c0>
+    └ <http.client.HTTPResponse object at 0x7eae23c000d0>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x7eae26d67420>
+                              └ <http.client.HTTPResponse object at 0x7eae23c000d0>
+  File "/usr/local/lib/python3.11/http/client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+          └ <class 'http.client.RemoteDisconnected'>
+
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+           │    └ <function HTTPConnectionPool.urlopen at 0x7eae26b29620>
+           └ <urllib3.connectionpool.HTTPConnectionPool object at 0x7eae2403ee50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              │       └ <function Retry.increment at 0x7eae26dc2b60>
+              └ Retry(total=0, connect=None, read=False, redirect=None, status=None)
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          │            │       │      └ <traceback object at 0x7eae2403f500>
+          │            │       └ ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+          │            └ ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+          └ <function reraise at 0x7eae26dc1300>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/util/util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+          │                    └ None
+          └ None
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               │    └ <function HTTPConnectionPool._make_request at 0x7eae26b29440>
+               └ <urllib3.connectionpool.HTTPConnectionPool object at 0x7eae2403ee50>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               │    └ <function HTTPConnection.getresponse at 0x7eae26b193a0>
+               └ <urllib3.connection.HTTPConnection object at 0x7eae241c6390>
+  File "/usr/local/lib/python3.11/site-packages/urllib3/connection.py", line 565, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/local/lib/python3.11/http/client.py", line 1395, in getresponse
+    response.begin()
+    │        └ <function HTTPResponse.begin at 0x7eae26d674c0>
+    └ <http.client.HTTPResponse object at 0x7eae23c000d0>
+  File "/usr/local/lib/python3.11/http/client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              │    └ <function HTTPResponse._read_status at 0x7eae26d67420>
+                              └ <http.client.HTTPResponse object at 0x7eae23c000d0>
+  File "/usr/local/lib/python3.11/http/client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+          └ <class 'http.client.RemoteDisconnected'>
+
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x7eae24c93560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T08:00', 'price': 111073.04}, {'type': 'H', 'ts': '2025-10-24T08:10', 'price': 111267.99}, {'...
+             │                         └ [['2025-10-24T08:00-03:00', 111114.03, 111146.8, 111073.04, 111146.79], ['2025-10-24T08:05-03:00', 111146.79, 111171.68, 1111...
+             └ <function detect_structure_with_llm at 0x7eae252c7a60>
+
+  File "/app/structure_oracle.py", line 117, in detect_structure_with_llm
+    raw1 = _call(prompt1)
+           │     └ '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nIdentify: (1) H/L pivots (fractal K), (2) trend (UP/DOWN/SIDEW...
+           └ <function detect_structure_with_llm.<locals>._call at 0x7eae26e49e40>
+
+  File "/app/structure_oracle.py", line 103, in _call
+    r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=90)  # era 60
+        │        │                                    └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nIdentify: (1) H/L pivots (frac...
+        │        └ <function post at 0x7eae269af7e0>
+        └ <module 'requests' from '/usr/local/lib/python3.11/site-packages/requests/__init__.py'>
+
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           │               │         │          │       └ {'timeout': 60}
+           │               │         │          └ {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nIdentify: (1) H/L pivots (frac...
+           │               │         └ None
+           │               └ 'http://florencia-ai-ollama:11434/api/generate'
+           └ <function request at 0x7eae26a61080>
+  File "/usr/local/lib/python3.11/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           │       │              │           │      └ {'data': None, 'json': {'model': 'phi:2.7b', 'prompt': '\nYou are a MARKET STRUCTURE annotator for 5-minute candles.\nIdentif...
+           │       │              │           └ 'http://florencia-ai-ollama:11434/api/generate'
+           │       │              └ 'post'
+           │       └ <function Session.request at 0x7eae269aeca0>
+           └ <requests.sessions.Session object at 0x7eae2403ce10>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           │    │    │       └ {'timeout': 60, 'allow_redirects': True, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+           │    │    └ <PreparedRequest [POST]>
+           │    └ <function Session.send at 0x7eae269af1a0>
+           └ <requests.sessions.Session object at 0x7eae2403ce10>
+  File "/usr/local/lib/python3.11/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        │       │    │          └ {'timeout': 60, 'proxies': OrderedDict(), 'stream': False, 'verify': True, 'cert': None}
+        │       │    └ <PreparedRequest [POST]>
+        │       └ <function HTTPAdapter.send at 0x7eae269ae520>
+        └ <requests.adapters.HTTPAdapter object at 0x7eae2401d3d0>
+  File "/usr/local/lib/python3.11/site-packages/requests/adapters.py", line 682, in send
+    raise ConnectionError(err, request=request)
+          │                            └ <PreparedRequest [POST]>
+          └ <class 'requests.exceptions.ConnectionError'>
+
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-10-24 10:32:28.979 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:33:13.410 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:33:13.410 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:35:09.123 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:35:55.187 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:35:55.187 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:40:45.659 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:41:20.577 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:43:10.106 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:43:54.988 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:44:18.200 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:44:18.200 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:44:55.189 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 10:45:35.367 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:45:35.368 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:47:16.662 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:47:16.662 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:50:55.895 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:50:55.895 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 10:56:39.945 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 10:56:39.946 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:02:25.088 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:02:25.089 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:06:05.996 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:06:05.996 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:11:50.815 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:11:50.815 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:17:34.155 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:17:34.155 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:21:14.256 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:21:14.257 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:26:56.916 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:26:56.916 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:32:39.822 | ERROR    | __main__:main:161 - Loop error: name 'logger' is not defined
+Traceback (most recent call last):
+
+  File "/app/structure_oracle.py", line 85, in detect_structure_with_llm
+    return StructureReport.model_validate(data)
+           │               │              └ {'trend': 'SIDEWAYS', 'last_swings': [], 'choch': {'detected': False, 'direction': None, 'broken_level_type': None, 'broken_l...
+           │               └ <classmethod(<function BaseModel.model_validate at 0x70bb2fd4b560>)>
+           └ <class 'structure_schema.StructureReport'>
+
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 568, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           │   │                      └ <method 'validate_python' of 'pydantic_core._pydantic_core.SchemaValidator' objects>
+           │   └ SchemaValidator(title="StructureReport", validator=Model(
+           │         ModelValidator {
+           │             revalidate: Never,
+           │             validator: ...
+           └ <class 'structure_schema.StructureReport'>
+
+pydantic_core._pydantic_core.ValidationError: 1 validation error for StructureReport
+confidence
+  Field required [type=missing, input_value={'trend': 'SIDEWAYS', 'la...e': False, 'notes': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.8/v/missing
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x70bb2fbef560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T10:15', 'price': 111160.0}, {'type': 'L', 'ts': '2025-10-24T10:40', 'price': 110231.0}, {'ty...
+             │                         └ [['2025-10-24T10:15-03:00', 111205.38, 111394.72, 111160.0, 111302.76], ['2025-10-24T10:20-03:00', 111302.76, 111391.68, 1112...
+             └ <function detect_structure_with_llm at 0x70bb3022b9c0>
+
+  File "/app/structure_oracle.py", line 88, in detect_structure_with_llm
+    logger.warning(f"JSON parse error: {str(e1)[:100]}")
+
+NameError: name 'logger' is not defined
+2025-10-24 11:36:19.883 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:36:19.884 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:42:02.395 | ERROR    | __main__:main:161 - Loop error: name 'logger' is not defined
+Traceback (most recent call last):
+
+  File "/app/structure_oracle.py", line 85, in detect_structure_with_llm
+    return StructureReport.model_validate(data)
+           │               │              └ {'trend': 'SIDEWAYS', 'last_swings': [], 'choch': {'detected': False, 'direction': None, 'broken_level_type': None, 'broken_l...
+           │               └ <classmethod(<function BaseModel.model_validate at 0x70bb2fd4b560>)>
+           └ <class 'structure_schema.StructureReport'>
+
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 568, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           │   │                      └ <method 'validate_python' of 'pydantic_core._pydantic_core.SchemaValidator' objects>
+           │   └ SchemaValidator(title="StructureReport", validator=Model(
+           │         ModelValidator {
+           │             revalidate: Never,
+           │             validator: ...
+           └ <class 'structure_schema.StructureReport'>
+
+pydantic_core._pydantic_core.ValidationError: 1 validation error for StructureReport
+confidence
+  Field required [type=missing, input_value={'trend': 'SIDEWAYS', 'la...e': False, 'notes': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.8/v/missing
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "/app/main.py", line 166, in <module>
+    main()
+    └ <function main at 0x70bb2fbef560>
+
+> File "/app/main.py", line 101, in main
+    report = detect_structure_with_llm(candles, pivots, K=2)
+             │                         │        └ [{'type': 'L', 'ts': '2025-10-24T10:40', 'price': 110231.0}, {'type': 'H', 'ts': '2025-10-24T10:55', 'price': 110938.57}, {'t...
+             │                         └ [['2025-10-24T10:25-03:00', 111331.96, 111331.96, 111241.37, 111247.3], ['2025-10-24T10:30-03:00', 111236.22, 111308.58, 1110...
+             └ <function detect_structure_with_llm at 0x70bb3022b9c0>
+
+  File "/app/structure_oracle.py", line 88, in detect_structure_with_llm
+    logger.warning(f"JSON parse error: {str(e1)[:100]}")
+
+NameError: name 'logger' is not defined
+2025-10-24 11:45:43.966 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:45:43.966 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:51:29.138 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:51:29.139 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 11:57:15.477 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 11:57:15.478 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:00:56.421 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:00:56.421 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:06:39.280 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:06:39.280 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:12:21.680 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:12:21.681 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:16:01.586 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:16:01.586 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:21:41.014 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:21:41.014 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:27:23.224 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:27:23.224 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:31:01.936 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:31:01.936 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:36:43.231 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:36:43.232 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:42:25.351 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:42:25.351 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:46:03.948 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:46:03.948 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:51:44.814 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:51:44.815 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 12:57:25.586 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 12:57:25.586 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:01:06.187 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:01:06.188 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:06:48.296 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:06:48.297 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:12:32.554 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:12:32.554 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:16:13.635 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:16:13.635 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:21:57.355 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:21:57.355 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:27:41.772 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:27:41.772 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:31:24.382 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:31:24.383 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:37:08.560 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:37:08.560 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:40:52.091 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:40:52.092 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:46:37.567 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:46:37.567 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:52:23.489 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:52:23.489 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 13:56:06.193 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 13:56:06.193 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:01:50.743 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:01:50.743 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:07:35.118 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:07:35.118 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:11:18.435 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:11:18.435 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:17:04.620 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:17:04.621 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:19:31.263 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-24 14:19:47.650 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:19:47.651 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:21:29.509 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:21:29.510 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:27:15.483 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:27:15.484 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-24 14:30:58.926 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-24 14:30:58.927 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00

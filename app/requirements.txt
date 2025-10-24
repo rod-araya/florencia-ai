@@ -1,0 +1,9 @@
+ccxt==4.4.33
+pandas==2.2.2
+numpy==1.26.4
+python-dotenv==1.0.1
+pydantic==2.8.2
+orjson==3.10.7
+requests==2.32.3
+tenacity==8.5.0
+loguru==0.7.2
