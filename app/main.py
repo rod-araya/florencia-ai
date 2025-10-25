@@ -75,8 +75,8 @@ def main():
                 continue
             last_closed_ts = curr_closed_ts
 
-            # ====== CONTEXTO COMPACTO ======
-            tail = work_df.tail(15)  # 15 velas = 3 horas, ultra-compacto
+            # ====== CONTEXTO BALANCEADO: suficiente para estructura, compacto para tokens ======
+            tail = work_df.tail(40)  # 40 velas = 3.3 horas (mínimo para detectar ChoCH)
             first_ts = tail["ts"].iloc[0].isoformat()
 
             all_pivots = fractal_pivot_candidates(work_df, K=2)
@@ -89,7 +89,7 @@ def main():
                         "ts": ts[:16],
                         "price": round(float(p.get("price", 0.0)), 2)
                     })
-            pivots = pivots[-8:]  # máx 8 pivots para ultra-compacto
+            pivots = pivots[-18:]  # máx 18 pivots (suficiente para 3-4 swings)
 
             def _r(x): return round(float(x), 2)
             candles = [

@@ -11,12 +11,23 @@ LLM_URL = os.getenv("LLM_URL", "http://ollama:11434")
 LLM_MODEL = os.getenv("LLM_MODEL", "llama3.2:3b-instruct-q4_0")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.2"))
 
-SYSTEM_PROMPT = r"""
-Market structure analyzer for 5m candles.
-Identify: pivots, trend (UP/DOWN/SIDEWAYS), ChoCH, post-ChoCH swing.
-Return ONLY valid JSON matching schema. No extra text.
-Be concise.
-"""
+SYSTEM_PROMPT = r"""Analyze 5m BTC market structure. Return ONLY valid JSON.
+
+TREND RULES:
+- UP: sequence of HH (higher highs) + HL (higher lows)
+- DOWN: sequence of LH (lower highs) + LL (lower lows)
+- SIDEWAYS: no clear pattern or <3 pivots
+
+CHOCH (Change of Character):
+- BULLISH: price closes ABOVE last LH (low-to-high swing) breaking downtrend
+- BEARISH: price closes BELOW last HL (high-to-low swing) breaking uptrend
+- Must have: broken_level_price, break_close_ts, leg{high_ts,high_price,low_ts,low_price}
+
+POST-CHOCH SWING:
+- BULLISH ChoCH needs HL (higher low) after break
+- BEARISH ChoCH needs LH (lower high) after break
+
+Set confidence 0.0-1.0 based on clarity. If uncertain: choch.detected=false, trend=SIDEWAYS, confidence<0.3"""
 
 # Strict template to force exact structure on retry
 STRICT_TEMPLATE = r"""{
@@ -58,16 +69,16 @@ def detect_structure_with_llm(candles: List[List], pivot_candidates: List[Dict],
             "prompt": prompt_text,
             "options": {
                 "temperature": LLM_TEMPERATURE,
-                "num_ctx": 2048,       # neural-chat:7b soporta más contexto
-                "num_predict": 256,   # permite más output para JSON detallado
+                "num_ctx": 3072,       # 40 velas + 18 pivots + prompt = ~2500 tokens
+                "num_predict": 300,    # JSON completo con leg + swings
                 "top_p": 0.9,
                 "repeat_penalty": 1.05,
-                "num_thread": 2       # baja CPU (opcional, quita si quieres más velocidad)
+                "num_thread": 4        # mejor rendimiento para llama3.2
             },
             "stream": False,
             "format": "json"
         }
-        r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=120)  # neural-chat:7b es más lento
+        r = requests.post(f"{LLM_URL}/api/generate", json=req, timeout=90)  # llama3.2 es rápido
         r.raise_for_status()
         return r.json().get("response", "{}")
 
