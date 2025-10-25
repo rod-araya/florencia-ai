@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Literal
 
-TrendT = Literal["UP","DOWN","SIDEWAYS"]
+TrendT = Literal["UP","DOWN"]  # FORZAR DECISIÓN: sin SIDEWAYS
 DirT = Literal["BULLISH","BEARISH"]
 
 class Swing(BaseModel):

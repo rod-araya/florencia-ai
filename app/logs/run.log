@@ -2017,3 +2017,15 @@ confidence
 2025-10-25 16:46:06.358 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
 2025-10-25 16:52:00.754 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
 2025-10-25 16:52:00.754 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-25 16:55:51.737 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=SIDEWAYS | conf=0.00
+2025-10-25 16:55:51.738 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-25 17:00:36.427 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-25 17:01:20.088 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=UP | conf=0.00
+2025-10-25 17:01:20.088 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-25 17:06:13.488 | INFO     | __main__:main:46 - florencia-ai iniciado | BTC/USDT 5m | PAPER=True
+2025-10-25 17:07:00.797 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=UP | conf=0.00
+2025-10-25 17:07:00.797 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-25 17:12:43.038 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=UP | conf=0.00
+2025-10-25 17:12:43.039 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
+2025-10-25 17:16:23.801 | INFO     | __main__:main:155 - Sin ChoCH válido | trend=UP | conf=0.00
+2025-10-25 17:16:23.802 | INFO     | __main__:main:158 - PnL realizado (exchange-managed aprox): 0.00
